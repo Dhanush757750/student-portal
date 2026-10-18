@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #eaf0ff, #f5f7fb, #dce7ff);
+        }
+
+        .login-container {
+            width: 380px;
+            max-width: 100%;
+            background: white;
+            padding: 35px 30px;
+            border-radius: 18px;
+            box-shadow: 0 15px 45px rgba(23, 59, 112, 0.15);
+            animation: appear 0.6s ease;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .login-container:hover {
+            box-shadow: 0 20px 50px rgba(23, 59, 112, 0.2);
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            border-radius: 18px;
+            color: white;
+            font-size: 30px;
+            background: linear-gradient(135deg, #173b70, #4779d1);
+            box-shadow: 0 6px 15px rgba(36, 86, 166, 0.25);
+        }
+
+        h2 {
+            text-align: center;
+            color: #173b70;
+            margin-bottom: 8px;
+            font-size: 25px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #778196;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .field {
+            margin-bottom: 19px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #263750;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d7deea;
+            border-radius: 8px;
+            font-size: 15px;
+            background: #fbfcff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #2456a6;
+            box-shadow: 0 0 0 3px rgba(36, 86, 166, 0.12);
+            background: white;
+        }
+
+        .password-wrapper input {
+            padding-right: 68px;
+        }
+
+        #togglePassword {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            color: #2456a6;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #togglePassword:hover {
+            color: #173b70;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin: 2px 0 22px;
+            font-size: 13px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: normal;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .remember input {
+            accent-color: #2456a6;
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+        }
+
+        a {
+            color: #2456a6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #173b70, #315fb4);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(23, 59, 112, 0.22);
+        }
+
+        .login-button:active {
+            transform: scale(0.98);
+        }
+
+        .login-button:disabled {
+            cursor: wait;
+            opacity: 0.7;
+            transform: none;
+        }
+
+        #message {
+            display: none;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 16px;
+            padding: 10px;
+            border-radius: 7px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        #message.show {
+            display: block;
+            animation: appear 0.25s ease;
+        }
+
+        #message.success {
+            color: #167447;
+            background: #e9f8ef;
+        }
+
+        #message.error {
+            color: #b42318;
+            background: #fff0ef;
+        }
+
+        #message.info {
+            color: #2456a6;
+            background: #edf3ff;
+        }
+
+        .footer {
+            text-align: center;
+            color: #8a94a6;
+            font-size: 12px;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding: 14px;
+            }
+
+            .login-container {
+                padding: 28px 22px;
+                border-radius: 14px;
+            }
+
+            h2 {
+                font-size: 23px;
+            }
+
+            .options {
+                font-size: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="login-container">
+        <div class="logo" aria-hidden="true">🎥</div>
+
+        <h2>DHANUSH C</h2>
+        <p class="subtitle">Sign in to your account</p>
+
+        <form id="loginForm">
+            <div class="field">
+                <label for="phone">Phone Number</label>
+                <div class="input-wrapper">
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter 10-digit phone number"
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        minlength="10"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="input-wrapper password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button type="button" id="togglePassword"
+                            aria-label="Show password"
+                            aria-pressed="false">
+                        Show
+                    </button>
+                </div>
+            </div>
+
+            <div class="options">
+                <label class="remember">
+                    <input type="checkbox" id="remember">
+                    Remember me
+                </label>
+
+                <a href="#" id="forgot">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-button" id="loginButton">
+                Login
+            </button>
+
+            <p id="message" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="footer">Student Portal &copy; <span id="year"></span></p>
+    </main>
+
+    <script>
+        // Demo credentials only. Do not use client-side credentials in production.
+        const correctPhone = "9908061390";
+        const correctPassword = "Dhanush#editor";
+
+        const loginForm = document.getElementById("loginForm");
+        const phoneInput = document.getElementById("phone");
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("togglePassword");
+        const rememberInput = document.getElementById("remember");
+        const loginButton = document.getElementById("loginButton");
+        const message = document.getElementById("message");
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = "show " + type;
+        }
+
+        // Allow digits only in the phone field.
+        phoneInput.addEventListener("input", function () {
+            phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 10);
+        });
+
+        // Show or hide password.
+        togglePassword.addEventListener("click", function () {
+            const show = passwordInput.type === "password";
+
+            passwordInput.type = show ? "text" : "password";
+            togglePassword.textContent = show ? "Hide" : "Show";
+            togglePassword.setAttribute("aria-label",
+                show ? "Hide password" : "Show password");
+            togglePassword.setAttribute("aria-pressed", String(show));
+        });
+
+        // Restore remembered phone number.
+        try {
+            const savedPhone = localStorage.getItem("rememberPhone");
+
+            if (savedPhone) {
+                phoneInput.value = savedPhone;
+                rememberInput.checked = true;
+            }
+        } catch (error) {
+            // The form remains usable if browser storage is disabled.
+        }
+
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const phone = phoneInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!/^[0-9]{10}$/.test(phone)) {
+                showMessage("Enter a valid 10-digit phone number.", "error");
+                phoneInput.focus();
+                return;
+            }
+
+            if (phone === correctPhone && password === correctPassword) {
+                showMessage("Login successful! Opening dashboard...", "success");
+                loginButton.disabled = true;
+                loginButton.textContent = "Signing in...";
+
+                try {
+                    if (rememberInput.checked) {
+                        localStorage.setItem("rememberPhone", phone);
+                    } else {
+                        localStorage.removeItem("rememberPhone");
+                    }
+                } catch (error) {
+                    // Login demo can continue if storage is disabled.
+                }
+
+                setTimeout(function () {
+                    window.location.href = "dashboard_mobile_same_laptop_view.html";
+                }, 700);
+            } else {
+                showMessage("Invalid phone number or password.", "error");
+                passwordInput.value = "";
+                passwordInput.focus();
+            }
+        });
+
+        document.getElementById("forgot").addEventListener("click", function (event) {
+            event.preventDefault();
+            showMessage(
+                "Please contact your administrator to reset your password.",
+                "info"
+            );
+        });
+    </script>
+</body>
+</html>

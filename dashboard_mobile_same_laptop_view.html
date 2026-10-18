@@ -1,0 +1,1369 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f6fb;
+    color: #252b3b;
+}
+
+header {
+    height: 75px;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 35px;
+    border-bottom: 1px solid #e5e8f0;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    color: #254c96;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile {
+    background: #e6edff;
+    color: #254c96;
+    padding: 11px 15px;
+    border-radius: 25px;
+    font-weight: bold;
+}
+
+.logout {
+    border: none;
+    background: #254c96;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.container {
+    padding: 20px 24px;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+}
+
+.welcome {
+    margin-bottom: 16px;
+}
+
+.welcome h1 {
+    font-size: 27px;
+    margin-bottom: 8px;
+}
+
+.welcome p {
+    color: #7a8294;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(25, 45, 85, 0.04);
+}
+
+.stat-card p {
+    color: #7a8294;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.stat-card h2 {
+    font-size: 25px;
+    color: #253b69;
+}
+
+.stat-card small {
+    display: block;
+    color: #29966a;
+    margin-top: 8px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.95fr) minmax(420px, 1.75fr) minmax(300px, 1fr);
+    gap: 14px;
+    align-items: stretch;
+}
+
+.panel {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    box-shadow: 0 3px 12px rgba(25, 45, 85, 0.04);
+    min-width: 0;
+}
+
+.left-column, .middle-column, .right-column {
+    min-width: 0;
+}
+.left-column {
+    display: flex;
+    flex-direction: column;
+}
+.left-column .panel:nth-child(2) {
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+}
+.left-column .panel:nth-child(2) textarea {
+    flex: 1;
+    min-height: 230px;
+}
+.left-column .logged-in-card {
+    flex: 0 0 auto;
+    min-height: 108px;
+    align-self: stretch;
+}
+.middle-column, .right-column {
+    display: flex;
+    flex-direction: column;
+}
+.middle-column .panel:last-child {
+    flex: 1;
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.panel-heading h2 {
+    font-size: 18px;
+}
+
+.panel-heading a {
+    color: #315bb0;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.task {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 13px 0;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.task input {
+    margin-top: 3px;
+    accent-color: #315bb0;
+    cursor: pointer;
+}
+
+.task label {
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.task small {
+    display: block;
+    color: #9299a8;
+    margin-top: 5px;
+}
+
+.task input:checked + label {
+    text-decoration: line-through;
+    color: #9299a8;
+}
+
+.add-task {
+    display: flex;
+    gap: 8px;
+    margin-top: 17px;
+}
+
+.add-task input {
+    min-width: 0;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dce1eb;
+    border-radius: 6px;
+}
+
+.primary-btn {
+    border: none;
+    background: #315bb0;
+    color: white;
+    padding: 10px 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.day-tabs {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.day-tabs button {
+    padding: 9px 13px;
+    border: 1px solid #e0e5ef;
+    border-radius: 7px;
+    background: white;
+    cursor: pointer;
+    color: #5f687b;
+}
+
+.day-tabs button.active {
+    background: #315bb0;
+    color: white;
+    border-color: #315bb0;
+}
+
+.schedule-item {
+    display: grid;
+    grid-template-columns: 65px 4px minmax(0, 1fr);
+    gap: 12px;
+    align-items: stretch;
+    margin-bottom: 15px;
+}
+
+.time {
+    color: #7c8494;
+    font-size: 12px;
+    padding-top: 14px;
+}
+
+.schedule-line {
+    background: #6b8de0;
+    border-radius: 5px;
+}
+
+.class-info {
+    padding: 13px;
+    border-radius: 8px;
+    background: #f1f4ff;
+}
+
+.class-info h3 {
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.class-info p {
+    color: #737d91;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.class-info.purple {
+    background: #f6f0ff;
+}
+
+.class-info.purple + .schedule-line {
+    background: #a580db;
+}
+
+.class-info.green {
+    background: #eaf8f1;
+}
+
+.class-info.orange {
+    background: #fff3e8;
+}
+
+.class-info h3.attendance-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+.attendance-check-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 500;
+    color: #315bb0;
+    white-space: nowrap;
+}
+.attendance-check-wrap input {
+    width: 16px;
+    height: 16px;
+    accent-color: #315bb0;
+    cursor: pointer;
+}
+
+.schedule-item.empty {
+    display: block;
+    color: #858da0;
+    font-size: 14px;
+    padding: 12px 0;
+}
+
+.calendar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.calendar-top button {
+    background: #f0f3fa;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 10px;
+    cursor: pointer;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 5px;
+    text-align: center;
+}
+
+.calendar-grid span {
+    font-size: 12px;
+    padding: 9px 0;
+    border-radius: 6px;
+}
+
+.calendar-grid .day-name {
+    color: #8a92a2;
+    font-weight: bold;
+}
+
+.calendar-grid .today {
+    background: #315bb0;
+    color: white;
+}
+
+.calendar-grid .has-event {
+    background: #e9efff;
+    color: #315bb0;
+    font-weight: bold;
+}
+
+.income-number {
+    font-size: 29px;
+    font-weight: bold;
+    color: #253b69;
+    margin-bottom: 8px;
+}
+
+.income-subtitle {
+    color: #8a92a2;
+    font-size: 13px;
+}
+
+.income-bar {
+    display: flex;
+    align-items: end;
+    gap: 5px;
+    height: 115px;
+    margin-top: 25px;
+    padding-bottom: 5px;
+}
+
+.bar-column {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    gap: 7px;
+}
+
+.bar {
+    width: 100%;
+    max-width: 25px;
+    background: #b9cafa;
+    border-radius: 5px 5px 0 0;
+}
+
+.bar.current {
+    background: #315bb0;
+}
+
+.bar-column small {
+    color: #8a92a2;
+    font-size: 9px;
+}
+
+.bar-column .bar-amount {
+    font-size: 8px;
+    color: #8a92a2;
+    white-space: nowrap;
+}
+
+.income-entry {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 13px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.income-entry span {
+    color: #777f91;
+}
+
+.income-entry strong {
+    color: #29966a;
+}
+
+.goal {
+    margin-top: 20px;
+}
+
+.goal-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.progress {
+    height: 8px;
+    background: #e9edf5;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress div {
+    height: 100%;
+    width: 65%;
+    background: #315bb0;
+    border-radius: 10px;
+}
+
+.income-checklist-wrap { margin-top: 18px; }
+.income-checklist-wrap h3 { font-size: 15px; margin-bottom: 6px; }
+#dailyIncomeChecklist { max-height: 360px; overflow-y: auto; margin-top: 12px; }
+.income-day-row { padding: 10px 0; border-bottom: 1px solid #edf0f5; }
+.income-day-heading { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; margin-bottom: 8px; }
+.income-day-heading strong { color: #253b69; }
+.income-checks { display: flex; gap: 12px; flex-wrap: wrap; }
+.income-check { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #777f91; cursor: pointer; }
+.income-check input { accent-color: #315bb0; width: 15px; height: 15px; }
+
+footer {
+    text-align: center;
+    color: #9299a8;
+    padding: 15px;
+    font-size: 12px;
+}
+
+@media (max-width: 1100px) {
+    .dashboard-grid {
+        grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.5fr);
+    }
+
+    .right-column {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .right-column .panel {
+        height: fit-content;
+    }
+}
+
+@media (max-width: 750px) {
+    header {
+        padding: 0 16px;
+    }
+
+    .container {
+        padding: 22px 15px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .left-column .panel:nth-child(2) {
+        min-height: 260px;
+    }
+    .left-column .panel:nth-child(2) textarea {
+        min-height: 150px;
+    }
+
+    .right-column {
+        grid-column: auto;
+        display: block;
+    }
+
+    .panel {
+        padding: 17px;
+    }
+
+    .welcome h1 {
+        font-size: 23px;
+    }
+
+    .profile {
+        display: none;
+    }
+}
+
+
+/* Logged-in student information card (replaces Monthly Goals). */
+.logged-in-card {
+    background: #30363b;
+    color: #ffffff;
+    padding: 14px;
+    border-radius: 0;
+    box-shadow: none;
+}
+.logged-in-heading {
+    color: #c8cdd2;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+.logged-in-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.student-avatar {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #e9edf5;
+    color: #315bb0;
+    font-weight: 700;
+    font-size: 12px;
+    border: 2px solid #ffffff;
+}
+.student-details {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.35;
+}
+.student-details strong {
+    font-size: 12px;
+    color: #ffffff;
+}
+.student-details span {
+    font-size: 10px;
+    color: #ffffff;
+}
+.student-details small {
+    font-size: 9px;
+    color: #d0d5da;
+    overflow-wrap: anywhere;
+}
+
+
+
+/* Responsive layout: adapts to desktop, tablet, and mobile screens. */
+html { width: 100%; min-width: 0; -webkit-text-size-adjust: 100%; }
+body { width: 100%; min-width: 0; overflow-x: hidden; }
+.container { width: 100%; max-width: 100%; padding: clamp(10px, 1.6vw, 24px); }
+header { width: 100%; min-width: 0; padding-inline: clamp(12px, 2vw, 35px); gap: 12px; }
+.dashboard-grid {
+    width: 100%;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.75fr) minmax(0, 1fr);
+    gap: clamp(8px, 1.1vw, 14px);
+    align-items: start;
+}
+.left-column, .middle-column, .right-column { width: 100%; min-width: 0; }
+.panel, .stat-card { min-width: 0; overflow-wrap: anywhere; }
+.stats { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(7px, 1vw, 14px); }
+.stat-card { padding: clamp(10px, 1.5vw, 22px); }
+.panel { padding: clamp(11px, 1.4vw, 18px); }
+.left-column .panel:nth-child(2) { min-height: 0; }
+.left-column .panel:nth-child(2) textarea,
+#quickNotes { width: 100%; min-height: clamp(150px, 24vh, 280px); max-width: 100%; }
+.logged-in-card { min-height: 0; height: auto; }
+.month-grid, .calendar-grid { min-width: 0; }
+img, canvas, svg, table { max-width: 100%; }
+
+@media (max-width: 1100px) {
+    .dashboard-grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr); }
+    .right-column {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(8px, 1.5vw, 16px);
+    }
+}
+@media (max-width: 750px) {
+    header { min-height: 60px; height: auto; padding: 12px; flex-wrap: wrap; }
+    .logo { font-size: clamp(17px, 4vw, 23px); }
+    .header-right { gap: 8px; flex-wrap: wrap; }
+    .container { padding: 12px; }
+    .welcome h1 { font-size: clamp(20px, 5vw, 27px); }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .stat-card { padding: 12px; }
+    .stat-card h2 { font-size: clamp(18px, 4.5vw, 25px); }
+    .dashboard-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .left-column, .middle-column, .right-column { grid-column: auto; display: flex; flex-direction: column; gap: 0; }
+    .right-column .panel { height: auto; }
+    .panel { padding: 14px; margin-bottom: 10px; }
+    .left-column .panel:nth-child(2) { min-height: 0; }
+    .left-column .panel:nth-child(2) textarea, #quickNotes { min-height: 180px; }
+    .schedule-item, .schedule-row { min-width: 0; }
+    .income-checks { gap: 8px; }
+    .income-check { font-size: 11px; }
+}
+@media (max-width: 420px) {
+    .container { padding: 8px; }
+    .stats { gap: 7px; }
+    .stat-card { padding: 9px; }
+    .stat-card p, .stat-card small { font-size: 11px; }
+    .panel { padding: 11px; }
+    .left-column .panel:nth-child(2) textarea, #quickNotes { min-height: 160px; }
+    .income-checks { gap: 6px; }
+    .income-check input { width: 14px; height: 14px; }
+}
+
+
+/* Keep the original desktop section order on every device. On narrow screens,
+   the same columns stack vertically without rearranging their contents. */
+.left-column { order: 1; }
+.middle-column { order: 2; }
+.right-column { order: 3; }
+@media (max-width: 750px) {
+  .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .left-column, .middle-column, .right-column { order: initial; width: 100%; }
+  .left-column { order: 1; }
+  .middle-column { order: 2; }
+  .right-column { order: 3; }
+}
+
+
+
+/* Keep the exact desktop dashboard layout on mobile instead of stacking rows. */
+@media (max-width: 750px) {
+  body { width: 1200px !important; min-width: 1200px !important; overflow-x: hidden; }
+  header { width: 1200px !important; min-width: 1200px !important; height: 75px !important; flex-wrap: nowrap !important; padding: 0 35px !important; }
+  .container { width: 1200px !important; max-width: none !important; padding: 20px 24px !important; }
+  .dashboard-grid { width: 100% !important; grid-template-columns: minmax(220px, 0.95fr) minmax(420px, 1.75fr) minmax(300px, 1fr) !important; gap: 14px !important; }
+  .stats { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 14px !important; }
+  .left-column, .middle-column, .right-column { display: block !important; width: auto !important; min-width: 0 !important; grid-column: auto !important; }
+  .right-column .panel { height: auto !important; }
+  .panel { padding: 18px !important; margin-bottom: 14px !important; }
+  .left-column .panel:nth-child(2) { min-height: 0 !important; }
+  .left-column .panel:nth-child(2) textarea, #quickNotes { min-height: 220px !important; }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Student Portal</div>
+    <div class="header-right">
+        <span id="headerDate"></span>
+        <div class="profile">Student</div>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<main class="container">
+    <section class="welcome">
+        <h1>Welcome back, Dhanush!</h1>
+        <p>Here is your academic and personal overview.</p>
+    </section>
+
+    <section class="stats">
+        <div class="stat-card">
+            <p>Classes Today</p>
+            <h2 id="classCount">0</h2>
+            <small>Today's schedule</small>
+        </div>
+        <div class="stat-card">
+            <p>Pending Tasks</p>
+            <h2 id="pendingCount">3</h2>
+            <small>Stay on track</small>
+        </div>
+        <div class="stat-card">
+            <p>Monthly Income</p>
+            <h2>₹12,500</h2>
+            <small>This month</small>
+        </div>
+        <div class="stat-card">
+            <p>Attendance</p>
+            <h2 id="attendancePercent">0%</h2>
+            <small id="attendanceSummary">0 of 0 classes attended</small>
+        </div>
+    </section>
+
+    <section class="dashboard-grid">
+
+        <!-- LEFT: TASKS -->
+        <div class="left-column">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>My Tasks</h2>
+                    <a href="#" id="clearCompleted">Clear completed</a>
+                </div>
+
+                <div id="taskList">
+                    <div class="task">
+                        <input type="checkbox" id="task1">
+                        <label for="task1">Complete DBMS assignment
+                            <small>Today · College work</small>
+                        </label>
+                    </div>
+                    <div class="task">
+                        <input type="checkbox" id="task2">
+                        <label for="task2">Study for CIA exam
+                            <small>Tomorrow · Exam preparation</small>
+                        </label>
+                    </div>
+                    <div class="task">
+                        <input type="checkbox" id="task3">
+                        <label for="task3">Work on project report
+                            <small>Oct 20 · Project</small>
+                        </label>
+                    </div>
+                </div>
+
+                <form class="add-task" id="addTaskForm">
+                    <input type="text" id="newTask"
+                           placeholder="Add a new task..." required>
+                    <button class="primary-btn" type="submit">Add</button>
+                </form>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>Quick Notes</h2>
+                </div>
+                <textarea id="quickNotes"
+                    placeholder="Write your notes here..."
+                    style="width:100%;min-height:190px;padding:12px;border:1px solid #dce1eb;border-radius:7px;resize:vertical;"
+                ></textarea>
+                <button class="primary-btn" id="saveNotes"
+                    style="margin-top:10px;width:100%">Save Notes</button>
+                <p id="notesMessage" style="font-size:12px;margin-top:8px;"></p>
+            </div>
+
+            <div class="panel logged-in-card">
+                <div class="logged-in-heading">Logged in as:</div>
+                <div class="logged-in-profile">
+                    <div class="student-avatar" aria-label="Student avatar">DC</div>
+                    <div class="student-details">
+                        <strong>24009885</strong>
+                        <span>DHANUSH C</span>
+                        <small>Ref1: 21222040066</small>
+                        <small>Ref2: 24009885</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MIDDLE: CLASS SCHEDULE -->
+        <div class="middle-column">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>Class Schedules</h2>
+                    <a href="#" id="todayLink">Today</a>
+                </div>
+
+                <div class="day-tabs" id="dayTabs">
+                    <button data-day="Mon">Mon</button>
+                    <button data-day="Tue">Tue</button>
+                    <button data-day="Wed">Wed</button>
+                    <button data-day="Thu">Thu</button>
+                    <button data-day="Fri">Fri</button>
+                    <button data-day="Sat">Sat</button>
+                    <button data-day="Sun">Sun</button>
+                </div>
+
+                <div id="scheduleList"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>Monthly Calendar</h2>
+                </div>
+                <div class="calendar-top">
+                    <button id="prevMonth" aria-label="Previous month">‹</button>
+                    <strong id="monthLabel"></strong>
+                    <button id="nextMonth" aria-label="Next month">›</button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+        </div>
+
+        <!-- RIGHT: MONTHLY INCOME -->
+        <div class="right-column">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>Monthly Income</h2>
+                </div>
+                <div class="income-number" id="monthlyIncomeTotal">₹0</div>
+                <p class="income-subtitle">Monthly income · ₹200 per checked box</p>
+
+                <div class="income-bar" id="monthlyIncomeChart"></div>
+
+                <div class="income-entry">
+                    <span>Earned this month</span>
+                    <strong id="earnedIncome">₹0</strong>
+                </div>
+                <div class="income-entry">
+                    <span>Potential (4 × ₹200 per day)</span>
+                    <strong id="potentialIncome">₹0</strong>
+                </div>
+
+                <div class="goal">
+                    <div class="goal-top">
+                        <span>Monthly target</span>
+                        <strong>₹20,000</strong>
+                    </div>
+                    <div class="progress"><div id="incomeTargetProgress" style="width:0%"></div></div>
+                </div>
+                <div class="income-checklist-wrap">
+                    <h3>Daily earnings</h3>
+                    <p class="income-subtitle">Choose any month and tick a box for each ₹200 earned. Each day has 4 boxes.</p>
+                    <label for="incomeMonth" style="display:block;font-size:13px;margin:10px 0 6px;color:#777f91;">Select month</label>
+                    <input type="month" id="incomeMonth" style="width:100%;padding:10px;border:1px solid #dfe5f0;border-radius:8px;margin-bottom:8px;font:inherit;">
+                    <div id="dailyIncomeChecklist"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</main>
+
+<footer>Student Portal Dashboard · Stay organized and keep learning.</footer>
+
+<script>
+const schedules = {
+    Mon: [
+        ["09:45 AM - 11:14 AM", "19AI305 – Advanced C Programming"],
+        ["11:30 AM - 12:14 PM", "ECA-SCOFT-M – SCOFT Mentor Meet"],
+        ["01:15 PM - 02:44 PM", "19CS404 – Database Management System and its Applications"],
+        ["03:00 PM - 04:29 PM", "C19GE624 – Japanese Language N5 Basic"],
+        ["05:00 PM - 06:29 PM", "Break"],
+        ["06:29 PM - 07:49 PM", "🎥"],
+        ["08:30 PM - 02:49 PM", "🎥"]
+    ],
+    Tue: [
+        ["08:00 AM - 09:29 AM", "19AI405 – Fundamentals of Artificial Intelligence"],
+        ["11:30 AM - 12:14 PM", "ECA-SCOFT-M – SCOFT Mentor Meet"],
+        ["01:15 PM - 02:44 PM", "19AI305 – Advanced C Programming"],
+        ["03:00 PM - 04:29 PM", "Break"],
+        ["05:00 PM - 07:49 PM", "🎥"],
+        ["08:30 PM - 02:49 PM", "🎥"]
+    ],
+    Wed: [
+        ["08:00 AM - 09:29 AM", "19CS404 – Database Management System and its Applications"],
+        ["09:45 AM - 11:14 AM", "19GE624 – Japanese Language N5 Basic"],
+        ["11:30 AM - 12:14 PM", "ECA-SCOFT-M – SCOFT Mentor Meet"],
+        ["01:15 PM - 02:44 PM", "19AI305 – Advanced C Programming"],
+        ["03:00 PM - 04:29 PM", "Break"],
+        ["05:00 PM - 07:49 PM", "🎥"],
+        ["08:30 PM - 03:49 PM", "🎥"]
+    ],
+    Thu: [
+        ["09:45 AM - 11:14 AM", "19AI413 – Deep Learning and its Applications"],
+        ["01:15 PM - 02:44 PM", "19CS404 – Database Management System and its Applications"],
+        ["03:00 PM - 04:29 PM", "19AI405 – Fundamentals of Artificial Intelligence"],
+        ["05:00 PM - 07:49 PM", "🎥"],
+        ["08:30 PM - 02:49 PM", "🎥"]
+    ],
+    Fri: [
+        ["08:00 AM - 09:29 AM", "19CS404 – Database Management System and its Applications"],
+        ["09:45 AM - 11:14 AM", "19AI413 – Deep Learning and its Applications"],
+        ["12:15 PM - 12:59 PM", "ECA-SCOFT-M – SCOFT Mentor Meet"],
+        ["01:15 PM - 02:44 PM", "19AI305 – Advanced C Programming"],
+        ["03:00 PM - 04:29 PM", "19AI405 – Fundamentals of Artificial Intelligence"],
+        ["05:00 PM - 07:49 PM", "🎥"],
+        ["08:30 PM - 03:49 PM", "🎥"]
+    ],
+    Sat: [
+        ["09:45 AM - 11:14 AM", "19AI405 – Fundamentals of Artificial Intelligence"],
+        ["12:15 PM - 12:59 PM", "ECA-SCOFT-M – SCOFT Mentor Meet"],
+        ["04:29 PM - 07:49 PM", "🎥"],
+        ["08:30 PM - 02:49 PM", "🎥"]
+        
+    ],
+    Sun: [
+        ["09:29 PM - 11:29 PM", "🎥"],
+        ["12:00 PM - 04:29 PM", "🎥"],
+        ["04:29 PM - 07:49 PM", "🎥"],
+        ["08:30 PM - 02:49 PM", "🎥"]
+    ]
+};
+
+const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+let selectedDay = dayNames[new Date().getDay()];
+
+// Count real scheduled sessions, excluding breaks and video placeholders.
+function countClasses(day) {
+    return (schedules[day] || []).filter(item => {
+        const subject = (item[1] || "").trim();
+        return subject !== "" && !/^break$/i.test(subject) && subject !== "🎥";
+    }).length;
+}
+
+function updateClassCount(day = selectedDay) {
+    document.getElementById("classCount").textContent = countClasses(day);
+}
+
+const attendanceStorageKey = "studentClassAttendanceChecks";
+let attendanceChecks = {};
+try {
+    attendanceChecks = JSON.parse(localStorage.getItem(attendanceStorageKey) || "{}");
+} catch (error) {
+    attendanceChecks = {};
+}
+
+function isRealClass(item) {
+    const subject = (item[1] || "").trim();
+    return subject !== "" && !/^break$/i.test(subject) && subject !== "🎥";
+}
+
+function attendanceKey(day, index) {
+    return `${day}-${index}`;
+}
+
+function updateAttendanceProgress() {
+    let totalClasses = 0;
+    let attendedClasses = 0;
+    Object.entries(schedules).forEach(([day, items]) => {
+        items.forEach((item, index) => {
+            if (!isRealClass(item)) return;
+            totalClasses++;
+            if (attendanceChecks[attendanceKey(day, index)] === true) attendedClasses++;
+        });
+    });
+    const percentage = totalClasses ? Math.round((attendedClasses / totalClasses) * 100) : 0;
+    document.getElementById("attendancePercent").textContent = `${percentage}%`;
+    document.getElementById("attendanceSummary").textContent = `${attendedClasses} of ${totalClasses} classes attended`;
+}
+
+function renderSchedule(day) {
+    selectedDay = day;
+    updateClassCount(day);
+
+    document.querySelectorAll("#dayTabs button").forEach(button => {
+        button.classList.toggle("active", button.dataset.day === day);
+    });
+
+    const list = document.getElementById("scheduleList");
+    list.innerHTML = "";
+
+    const classes = schedules[day] || [];
+
+    if (classes.length === 0) {
+        list.innerHTML = '<div class="schedule-item empty">No classes scheduled. Enjoy your day!</div>';
+        return;
+    }
+
+    classes.forEach((item, index) => {
+        const colors = ["", "purple", "green", "orange"];
+        const entry = document.createElement("div");
+        entry.className = "schedule-item";
+
+        const time = document.createElement("div");
+        time.className = "time";
+        time.textContent = item[0];
+
+        const line = document.createElement("div");
+        line.className = "schedule-line";
+
+        const info = document.createElement("div");
+        info.className = "class-info " + colors[index % colors.length];
+
+        const title = document.createElement("h3");
+        title.textContent = item[1];
+
+        if (isRealClass(item)) {
+            title.classList.add("attendance-title-row");
+            const checkWrap = document.createElement("label");
+            checkWrap.className = "attendance-check-wrap";
+            checkWrap.title = "Mark attendance for this class";
+            const check = document.createElement("input");
+            check.type = "checkbox";
+            check.checked = attendanceChecks[attendanceKey(day, index)] === true;
+            check.setAttribute("aria-label", `Mark attendance: ${item[1]}`);
+            check.addEventListener("change", () => {
+                attendanceChecks[attendanceKey(day, index)] = check.checked;
+                localStorage.setItem(attendanceStorageKey, JSON.stringify(attendanceChecks));
+                updateAttendanceProgress();
+            });
+            const checkText = document.createElement("span");
+            checkText.textContent = "Attended";
+            checkWrap.append(check, checkText);
+            title.appendChild(checkWrap);
+        }
+
+        const details = document.createElement("p");
+        details.textContent = item[2] || "";
+
+        info.append(title, details);
+        entry.append(time, line, info);
+        list.appendChild(entry);
+    });
+}
+
+document.querySelectorAll("#dayTabs button").forEach(button => {
+    button.addEventListener("click", () => renderSchedule(button.dataset.day));
+});
+
+document.getElementById("todayLink").addEventListener("click", event => {
+    event.preventDefault();
+    renderSchedule(dayNames[new Date().getDay()]);
+});
+
+function updateDate() {
+    document.getElementById("headerDate").textContent =
+        new Date().toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        });
+}
+
+function updatePendingCount() {
+    const tasks = document.querySelectorAll("#taskList .task");
+    const pending = [...tasks].filter(task =>
+        !task.querySelector("input").checked
+    ).length;
+
+    document.getElementById("pendingCount").textContent = pending;
+}
+
+document.getElementById("taskList").addEventListener("change", event => {
+    if (event.target.matches('input[type="checkbox"]')) {
+        updatePendingCount();
+    }
+});
+
+document.getElementById("addTaskForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const input = document.getElementById("newTask");
+    const taskText = input.value.trim();
+
+    if (!taskText) return;
+
+    const id = "task-" + Date.now();
+    const task = document.createElement("div");
+    task.className = "task";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = id;
+
+    const label = document.createElement("label");
+    label.htmlFor = id;
+    label.append(document.createTextNode(taskText));
+
+    const small = document.createElement("small");
+    small.textContent = "New task";
+    label.appendChild(small);
+
+    task.append(checkbox, label);
+    document.getElementById("taskList").appendChild(task);
+
+    input.value = "";
+    updatePendingCount();
+});
+
+document.getElementById("clearCompleted").addEventListener("click", event => {
+    event.preventDefault();
+
+    document.querySelectorAll("#taskList .task").forEach(task => {
+        if (task.querySelector("input").checked) task.remove();
+    });
+
+    updatePendingCount();
+});
+
+let calendarDate = new Date();
+
+function renderCalendar() {
+    const year = calendarDate.getFullYear();
+    const month = calendarDate.getMonth();
+
+    document.getElementById("monthLabel").textContent =
+        calendarDate.toLocaleDateString("en-IN", {
+            month: "long",
+            year: "numeric"
+        });
+
+    const grid = document.getElementById("calendarGrid");
+    grid.innerHTML = "";
+
+    ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].forEach(day => {
+        const cell = document.createElement("span");
+        cell.className = "day-name";
+        cell.textContent = day;
+        grid.appendChild(cell);
+    });
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+
+    for (let i = 0; i < firstDay; i++) {
+        grid.appendChild(document.createElement("span"));
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement("span");
+        cell.textContent = day;
+
+        if (day === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear()) {
+            cell.className = "today";
+        }
+
+        grid.appendChild(cell);
+    }
+}
+
+document.getElementById("prevMonth").addEventListener("click", () => {
+    calendarDate.setMonth(calendarDate.getMonth() - 1);
+    renderCalendar();
+});
+
+document.getElementById("nextMonth").addEventListener("click", () => {
+    calendarDate.setMonth(calendarDate.getMonth() + 1);
+    renderCalendar();
+});
+
+const notes = document.getElementById("quickNotes");
+notes.value = localStorage.getItem("studentQuickNotes") || "";
+
+document.getElementById("saveNotes").addEventListener("click", () => {
+    localStorage.setItem("studentQuickNotes", notes.value);
+    document.getElementById("notesMessage").textContent = "Notes saved on this browser.";
+});
+
+// Daily income tracker: 4 checkboxes per day, each worth ₹200, for every month.
+const DAILY_INCOME_PER_CHECK = 200;
+const CHECKS_PER_DAY = 4;
+const incomeStorageKey = "studentDailyIncomeChecks";
+let dailyIncomeChecks = {};
+try {
+    dailyIncomeChecks = JSON.parse(localStorage.getItem(incomeStorageKey) || "{}");
+} catch (error) {
+    dailyIncomeChecks = {};
+}
+
+const incomeMonthInput = document.getElementById("incomeMonth");
+const initialNow = new Date();
+incomeMonthInput.value = `${initialNow.getFullYear()}-${String(initialNow.getMonth() + 1).padStart(2, "0")}`;
+incomeMonthInput.addEventListener("change", renderDailyIncomeChecklist);
+
+function getSelectedIncomeMonth() {
+    const value = incomeMonthInput.value;
+    if (!value) {
+        const now = new Date();
+        return { year: now.getFullYear(), monthIndex: now.getMonth() };
+    }
+    const [year, month] = value.split("-").map(Number);
+    return { year, monthIndex: month - 1 };
+}
+
+function incomeDateKey(year, monthIndex, day) {
+    return `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function renderDailyIncomeChecklist() {
+    const container = document.getElementById("dailyIncomeChecklist");
+    if (!container) return;
+    container.innerHTML = "";
+    const { year, monthIndex } = getSelectedIncomeMonth();
+    const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const key = incomeDateKey(year, monthIndex, day);
+        if (!Array.isArray(dailyIncomeChecks[key])) dailyIncomeChecks[key] = [false, false, false, false];
+        while (dailyIncomeChecks[key].length < CHECKS_PER_DAY) dailyIncomeChecks[key].push(false);
+        const row = document.createElement("div");
+        row.className = "income-day-row";
+        const heading = document.createElement("div");
+        heading.className = "income-day-heading";
+        const dateLabel = document.createElement("span");
+        dateLabel.textContent = new Date(year, monthIndex, day).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" });
+        const amount = document.createElement("strong");
+        amount.id = `dailyIncome-${key}`;
+        heading.append(dateLabel, amount);
+        const checks = document.createElement("div");
+        checks.className = "income-checks";
+
+        for (let i = 0; i < CHECKS_PER_DAY; i++) {
+            const label = document.createElement("label");
+            label.className = "income-check";
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.checked = Boolean(dailyIncomeChecks[key][i]);
+            checkbox.setAttribute("aria-label", `${key}: ₹200 earning ${i + 1}`);
+            checkbox.addEventListener("change", () => {
+                dailyIncomeChecks[key][i] = checkbox.checked;
+                localStorage.setItem(incomeStorageKey, JSON.stringify(dailyIncomeChecks));
+                updateIncomeTotals();
+            });
+            const labelText = document.createElement("span");
+            labelText.textContent = "₹200";
+            label.append(checkbox, labelText);
+            checks.appendChild(label);
+        }
+        row.append(heading, checks);
+        container.appendChild(row);
+    }
+    localStorage.setItem(incomeStorageKey, JSON.stringify(dailyIncomeChecks));
+    updateIncomeTotals();
+}
+
+function getMonthIncome(year, monthIndex) {
+    const days = new Date(year, monthIndex + 1, 0).getDate();
+    let totalChecks = 0;
+    for (let day = 1; day <= days; day++) {
+        const key = incomeDateKey(year, monthIndex, day);
+        const checks = Array.isArray(dailyIncomeChecks[key]) ? dailyIncomeChecks[key] : [];
+        totalChecks += checks.slice(0, CHECKS_PER_DAY).filter(Boolean).length;
+    }
+    return totalChecks * DAILY_INCOME_PER_CHECK;
+}
+
+function renderMonthlyIncomeChart() {
+    const chart = document.getElementById("monthlyIncomeChart");
+    if (!chart) return;
+    chart.innerHTML = "";
+    const { year, monthIndex: selectedMonthIndex } = getSelectedIncomeMonth();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const values = monthNames.map((_, monthIndex) => getMonthIncome(year, monthIndex));
+    // Use a fixed ₹20,000 scale so each bar grows according to that month's actual earnings.
+    // Zero income means zero-height bar; ₹20,000 or more reaches the full chart height.
+    const chartMaximum = 20000;
+
+    monthNames.forEach((name, monthIndex) => {
+        const column = document.createElement("div");
+        column.className = "bar-column";
+        const bar = document.createElement("div");
+        bar.className = "bar" + (monthIndex === selectedMonthIndex ? " current" : "");
+        const barHeight = Math.min(100, (values[monthIndex] / chartMaximum) * 100);
+        bar.style.height = `${barHeight}%`;
+        bar.title = `${name} ${year}: ₹${values[monthIndex].toLocaleString("en-IN")}`;
+        const label = document.createElement("small");
+        label.textContent = name;
+        column.append(bar, label);
+        chart.appendChild(column);
+    });
+}
+
+function updateIncomeTotals() {
+    const { year, monthIndex } = getSelectedIncomeMonth();
+    const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+    let totalChecks = 0;
+    const potential = daysInMonth * CHECKS_PER_DAY * DAILY_INCOME_PER_CHECK;
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const key = incomeDateKey(year, monthIndex, day);
+        const checks = Array.isArray(dailyIncomeChecks[key]) ? dailyIncomeChecks[key] : [false, false, false, false];
+        const checkedCount = checks.slice(0, CHECKS_PER_DAY).filter(Boolean).length;
+        const earned = checkedCount * DAILY_INCOME_PER_CHECK;
+        totalChecks += checkedCount;
+        const dailyAmount = document.getElementById(`dailyIncome-${key}`);
+        if (dailyAmount) dailyAmount.textContent = `₹${earned.toLocaleString("en-IN")}`;
+    }
+
+    const total = totalChecks * DAILY_INCOME_PER_CHECK;
+    document.getElementById("monthlyIncomeTotal").textContent = `₹${total.toLocaleString("en-IN")}`;
+    document.getElementById("earnedIncome").textContent = `₹${total.toLocaleString("en-IN")}`;
+    document.getElementById("potentialIncome").textContent = `₹${potential.toLocaleString("en-IN")}`;
+    const progress = Math.min(100, (total / 20000) * 100);
+    document.getElementById("incomeTargetProgress").style.width = `${progress}%`;
+
+    renderMonthlyIncomeChart();
+}
+
+function logout() {
+    window.location.href = "login.html";
+}
+
+updateDate();
+renderDailyIncomeChecklist();
+renderSchedule(selectedDay);
+updateAttendanceProgress();
+renderCalendar();
+updatePendingCount();
+</script>
+
+
+<script>
+(function keepDesktopLayoutOnMobile() {
+  function fitDesktopDashboard() {
+    const mobile = window.innerWidth <= 750;
+    if (mobile) {
+      const scale = window.innerWidth / 1200;
+      document.body.style.width = '1200px';
+      document.body.style.minWidth = '1200px';
+      document.body.style.zoom = String(scale);
+      document.documentElement.style.width = window.innerWidth + 'px';
+      document.documentElement.style.overflowX = 'hidden';
+    } else {
+      document.body.style.width = '';
+      document.body.style.minWidth = '';
+      document.body.style.zoom = '';
+      document.documentElement.style.width = '';
+      document.documentElement.style.overflowX = '';
+    }
+  }
+  fitDesktopDashboard();
+  window.addEventListener('resize', fitDesktopDashboard);
+  window.addEventListener('orientationchange', fitDesktopDashboard);
+})();
+</script>
+
+</body>
+</html>
